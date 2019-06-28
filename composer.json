@@ -1,0 +1,6 @@
+{
+    "require": {
+        "xiaosier/libweibo": "dev-master",
+        "tp5er/tp5-databackup": "dev-master"
+    }
+}

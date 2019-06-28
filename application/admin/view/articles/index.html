@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>LuckyPig后台管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="__ADMIN__/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<form class="layui-form">
+	<blockquote class="layui-elem-quote quoteBox">
+		<form class="layui-form">
+			<div class="layui-inline">
+				<a class="layui-btn layui-btn-normal addNews_btn">添加文章</a>
+			</div>
+			<div class="layui-inline">
+				<a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn">批量删除</a>
+			</div>
+		</form>
+	</blockquote>
+	<table id="newsList" lay-filter="newsList"></table>
+	<script type="text/html" id="switchTpl">
+	  <input type="checkbox" name="tj" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="filter" {{ d.tj == 1 ? 'checked' : '' }}>
+	</script>
+	<script type="text/html" id="switchTplPos">
+	  <input type="checkbox" name="posid" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="filter" {{ d.posid == 1 ? 'checked' : '' }}>
+	</script>
+
+	<!--操作-->
+	<script type="text/html" id="newsListBar">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" value= {{d.id}} rel={{d.id}}>删除</a>
+		<a class="layui-btn layui-btn-xs layui-btn-primary" href="/article/{{d.id}}" target="_blank">预览</a>
+	</script>
+</form>
+<script type="text/javascript" src="__ADMIN__/layui/layui.js"></script>
+<script type="text/javascript" src="__ADMIN__/js/newsList.js"></script>
+</body>
+</html>

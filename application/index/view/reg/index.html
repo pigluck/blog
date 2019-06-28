@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>注册丨LuckyPig个人博客</title>
+<link rel="stylesheet" href="__INDEX__/css/reg.css">
+<script type="text/javascript">
+  document.oncontextmenu = function(){
+    event.returnValue = false;
+}
+document.onselectstart = function(){
+    event.returnValue = false;
+}
+</script>
+<body>
+<div class="register-container">
+<h1>{:lang('欢迎注册')}Luckypig</h1>
+<form id="registerForm">
+<div>
+<input type="text" name="username" class="username" placeholder="{:lang('您的用户名')}" autocomplete="off" id="username" maxlength="20"/>
+</div>
+<div>
+<input id="pwd" type="password" name="password" class="password" placeholder="{:lang('输入密码')}" oncontextmenu="return false" onpaste="return false" maxlength="16"/>
+</div>
+<div>
+<input type="password" name="confirm_password" class="confirm_password" placeholder="{:lang('再次输入密码')}" oncontextmenu="return false" onpaste="return false" maxlength="16"/>
+</div>
+<div style="position: relative;">
+<input style="width: 210px;float: left;" type="text" name="phone_number" class="phone_number" placeholder="{:lang('输入手机号码')}" autocomplete="off" id="number" maxlength="11"/>
+<p id="number-error" class="error">{:lang('请输入合法手机号码')}</p>
+<button style="float: right;width: 90px;" id="submitCode" onclick="return check_phone();">{:lang('发送验证码')}</button>
+</div>
+<div>
+<input type="text" name="check_code" class="phone_number" placeholder="{:lang('输入验证码')}" autocomplete="off" id="code" maxlength="6" />
+</div>
+<button id="submit" type="submit">{:lang('注 册')}</button>
+</form>
+<a href="/userLogin">
+<button type="button" class="register-tis">{:lang('已经有账号')}？</button>
+</a>
+</div>
+</body>
+<script src="__INDEX__/js/jquery.min.js"></script>
+<script src="__INDEX__/js/md5.js"></script>
+<script src="__INDEX__/js/reg.js"></script>
+
+<script src="__INDEX__/js/supersized.3.2.7.min.js"></script>
+<script src="__INDEX__/js/supersized-init.js"></script>
+
+<script src="__INDEX__/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+	function check_phone(){
+		var phone = document.getElementById('number').value;
+    	if(!(/^1[34578]\d{9}$/.test(phone))){
+    		$("#number-error").css('display','block');
+    	}else{
+    		$("#number-error").css('display','none');
+    		codeButton();
+    		$.post('{:url("index/reg/sendsms")}',{tel:phone},function(data){alert(data);});
+    	}
+		return false;
+	}
+
+	function codeButton(){
+	    var code = $("#submitCode");
+	    code.attr("disabled","disabled");
+	    setTimeout(function(){
+	    	code.css("opacity","0.8");
+	    	code.css('background-color',"#A9A9A9")
+	    },1000)
+	    var time = 60;
+	    var set=setInterval(function(){
+	    code.html("{:lang('重新发送')}("+--time+")");
+	    }, 1000);
+	    setTimeout(function(){
+	    code.attr("disabled",false).html("{:lang('重新发送')}");
+	    code.css('background-color','rgb(6,152,224)');
+	    clearInterval(set);
+	    }, 60000);
+	}
+</script>
+</html>

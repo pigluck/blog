@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{$sys.webname}</title>
+<meta property="wb:webmaster" content="e818a252065a2967" />
+<meta name="keywords" content="{$sys.keywords}" />
+<meta name="description" content="{$sys.description}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="__INDEX__/css/base.css" rel="stylesheet">
+<link href="__INDEX__/css/index.css" rel="stylesheet">
+<link href="__INDEX__/css/m.css" rel="stylesheet">
+<script src="__INDEX__/js/jquery.min.js" type="text/javascript"></script>
+<script src="__INDEX__/js/jquery.easyfader.min.js"></script>
+<script src="__INDEX__/js/scrollReveal.js"></script>
+<script src="__INDEX__/js/common.js"></script>
+<script type="text/javascript">
+  document.oncontextmenu = function(){
+    event.returnValue = false;
+}
+document.onselectstart = function(){
+    event.returnValue = false;
+}
+</script>
+<!--[if lt IE 9]>
+<script src="__INDEX__/js/modernizr.js"></script>
+<![endif]-->
+</head>
+<body>
+{include file='index/head'}
+<article> 
+  <!--banner begin-->
+ <div class="picsbox"> 
+  <div class="banner">
+    <div id="banner" class="fader">
+      {lp:list db='article' dbfield='id' id='vo' where="posid='1' and delete_time=0 and tj =1 and lang='$lang'" order='update_time desc' limit='10'}
+      <li class="slide" ><a href="/article/{$vo.id}" target="_blank">
+        {if condition="$vo['thumb'] eq ''"}
+      <img src="/uploads/20181124/9c84254f5099be6bf96681a668540eaa.jpg">
+      {else /}
+      <img src="{$vo.thumb}">
+      {/if}
+        <span class="imginfo">{$vo.title}</span></a></li>
+      {/lp:list}
+      <div class="fader_controls">
+        <div class="page prev" data-target="prev">&lsaquo;</div>
+        <div class="page next" data-target="next">&rsaquo;</div>
+        <ul class="pager_list">
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!--banner end-->
+  <div class="toppic">
+    {lp:list db='article' dbfield='id' id='vo' where="posid='0' and delete_time=0 and tj = 1 and lang='$lang'" order='update_time desc' limit='2'}
+    <li> <a href="/article/{$vo.id}" target="_blank"> <i>
+      {if condition="$vo['thumb'] eq ''"}
+      <img src="/uploads/20181124/9c84254f5099be6bf96681a668540eaa.jpg">
+      {else /}
+      <img src="{$vo.thumb}">
+      {/if}
+    </i>
+      <h2>{$vo.title}</h2>
+      <span>{:lang(get_catname($vo.cid))}</span> </a> </li>
+      {/lp:list}
+  </div>
+  </div>
+  <div class="blank"></div>
+  <!--blogsbox begin-->
+  <div class="blogsbox">
+    {lp:list db='article' dbfield='id' id='vo' where="delete_time=0 and lang='$lang'" order='update_time desc' limit='13'}
+    <div class="blogs" data-scroll-reveal="enter bottom over 1s" >
+      <h3 class="blogtitle"><a href="/article/{$vo.id}" target="_blank">{$vo.title}</a></h3>
+      {if condition="$vo['thumb'] neq ''"}
+      <span class="blogpic"><a href="/article/{$vo.id}" title=""><img src="{$vo.thumb}" alt=""></a></span>
+      {/if}
+      <p class="blogtext">{$vo.description}... </p>
+      <div class="bloginfo">
+        <ul>
+          <li class="lmname"><a href="/{$vo.cid|get_catdir}">{:lang(get_catname($vo.cid))}</a></li>
+          <li class="timer">{$vo.update_time|date="Y-m-d",###}</li>
+          <li class="view"><span>{$vo.hits}</span>{:lang('已阅读')}</li>
+          <li class="like">{$vo.zan}</li>
+        </ul>
+      </div>
+    </div>
+    {/lp:list}
+  </div>
+  <!--blogsbox end-->
+ {include file='index/right'}
+</article>
+ {include file='index/footer'}
+</body>
+</html>

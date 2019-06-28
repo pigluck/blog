@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>LuckyPig后台管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="__ADMIN__/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<form class="layui-form">
+	<blockquote class="layui-elem-quote quoteBox">
+			<div class="layui-inline">
+				<button class="layui-btn layui-btn" lay-filter="add" lay-submit>添加栏目</button>
+			</div>
+	</blockquote>
+	<div class="layui-form">
+  <table class="layui-table">
+    <colgroup>
+      <col width="150">
+      <col width="250">
+      <col width="250">
+      <col width="200">
+      <col width="100">
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+      	<th>ID</th>
+        <th>栏目名</th>
+        <th>栏目别名</th>
+        <th>文章数</th>
+        <th>是否启用</th>
+        <th>操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+      {volist name='catlist' id='vo'}
+      <tr>
+      	<td>{$vo.id}</td>
+        <td>{$vo.catname}</td>
+        <td>{$vo.catdir}</td>
+        <td>{$vo.num}</td>
+        <td>
+        	{if condition="$vo['open'] eq 1"}
+        	<input type="checkbox" value="{$vo['id']}" checked="" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+        	{else /}
+        	<input type="checkbox" value="{$vo['id']}" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+        	{/if}
+        </td>
+        <td><button value="{$vo['id']}" class="layui-btn layui-btn-xs" lay-filter="edit" lay-submit>编辑</button>
+		<button value="{$vo['id']}" class="layui-btn layui-btn-danger layui-btn-xs" lay-filter="del" lay-submit>删除</button>
+	</td>
+      </tr>
+      {/volist}
+    </tbody>
+  </table>
+</div>
+</form>
+<script type="text/javascript" src="__ADMIN__/layui/layui.js"></script>
+<!-- <script type="text/javascript" src="__ADMIN__/js/userList.js"></script> -->
+</body>
+<script type="text/javascript">
+	layui.use(['form','layer'],function(){
+    var form = layui.form,
+        layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery;
+
+    form.on('switch(switchTest)', function(data){
+    	opennum = this.checked ? '1' : '0';
+    	$.post('/admin/category/open',{id:data.value,open:opennum},function(res){
+    		res = eval('('+res+')');
+    		if (res.code == 1) {
+    			layer.msg(res.msg,{icon: 1, time: 1000});
+    		}else{
+    			layer.msg(res.msg,{icon:2,time:1000});
+    		}
+    	});
+  });
+
+    form.on('submit(del)',function(data){
+    	cid = this.value;
+    	layer.confirm('删除栏目会同时删除该栏目下的文章，是否继续', {icon: 3, title:'提示'}, function(index){
+		  $.post('/admin/category/delete',{id:cid},function(res){
+    		res = eval('('+res+')');
+    		if (res.code == "0000") {
+    			layer.msg(res.msg,{icon: 1, time: 1000});
+    			window.location.reload();
+    		}else{
+    			layer.msg(res.msg,{icon:2,time:1000});
+    		}
+    	});
+		  
+		  layer.close(index);
+		});
+		return false;
+    });
+
+    function addUser(edit){
+        var index = layui.layer.open({
+            title : "修改栏目",
+            type : 2,
+            content : "updatecat",
+            success : function(layero, index){
+
+                var body = layui.layer.getChildFrame('body', index);
+                // console.log(edit.id);
+                if(edit){
+                    body.find(".userName").val(edit.id);  
+                    body.find(".userEmail").val(edit.catname);
+                    body.find(".lj").val(edit.catdir);
+                    if (edit.open == 1) {
+                    	 body.find("input[name='open']").prop("checked","checked");
+                    }
+                    body.find(".userGrade option[value="+edit.parentid+"]").prop("selected","selected");
+                    body.find(".catlx option[value="+edit.lx+"]").prop("selected","selected");
+                    body.find(".cattemplate option[value='"+edit.template+"']").prop("selected","selected");
+                    body.find(".userDesc").val(edit.keywords);    
+                    body.find(".catDesc").text(edit.description);
+                    form.render();
+                }else{
+                    body.find(".userName").val(0);  
+                }
+            }
+        })
+        layui.layer.full(index);
+        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+        $(window).on("resize",function(){
+            layui.layer.full(window.sessionStorage.getItem("index"));
+        })
+    }
+
+    form.on('submit(edit)',function(data){
+    	cid = this.value;
+    	$.post('/admin/category/edit',{id:cid},function(res){
+    		res = eval('('+res+')');
+    		addUser(res);
+    	});
+    	
+    	return false;
+    });
+
+    form.on('submit(add)',function(data){
+        // cid = this.value;
+       addUser(res =false);
+        
+        return false;
+    });
+})
+</script>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>LuckyPig后台管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="__ADMIN__/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<form class="layui-form">
+	<blockquote class="layui-elem-quote quoteBox">
+		<form class="layui-form">
+			<div class="layui-inline">
+				<a class="layui-btn layui-btn-normal addNews_btn">还原文章</a>
+			</div>
+			<div class="layui-inline">
+				<a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn">永久删除</a>
+			</div>
+		</form>
+	</blockquote>
+	<table id="newsList" lay-filter="newsList"></table>
+
+	<!--操作-->
+	<script type="text/html" id="newsListBar">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">还原</a>
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" value= {{d.id}} rel={{d.id}}>删除</a>
+		
+	</script>
+</form>
+<script type="text/javascript" src="__ADMIN__/layui/layui.js"></script>
+<!-- <script type="text/javascript" src="__ADMIN__/js/newsList.js"></script> -->
+<script type="text/javascript">
+	layui.use(['form','layer','laydate','table','laytpl'],function(){
+    var form = layui.form,
+        layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery,
+        laydate = layui.laydate,
+        laytpl = layui.laytpl,
+        table = layui.table;
+
+    //新闻列表
+    var tableIns = table.render({
+        elem: '#newsList',
+        url : '/admin/articles/trashlist',
+        cellMinWidth : 95,
+        page : true,
+        height : "full-125",
+        limit : 8,
+        width:950,
+        // limits : [5,10,15,20,25],
+        id : "newsListTable",
+        cols : [[
+            {type: "checkbox", fixed:"left", width:50},
+            {field: 'id', title: 'ID', width:60, align:"center",sort:true},
+            {field: 'title', title: '文章标题', width:300},
+            {field: 'catname', title: '栏目名', align:'center',width:200},
+            {field: 'delete_time', title: '删除时间',width:200,sort:true, align:'center',templet: function(d){return stampToTime(d.delete_time)}},
+            {title: '操作',templet:'#newsListBar',fixed:"right",align:"center"}
+        ]],
+    });
+
+    function stampToTime(timestamp) {
+    if(timestamp == 0) {
+        return "";
+    }else{
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear();
+        var M = date.getMonth()+ 1;
+        var D = date.getDate();
+        var h = date.getHours();
+        var m = date.getMinutes();
+        var s = date.getSeconds();
+        var datestring = Y + "-";
+        if (M < 10) datestring += "0";
+        datestring += M + "-";
+        if (D < 10) datestring += "0";
+        datestring += D + " ";
+        if (h < 10) datestring += "0";
+        datestring += h + ":";
+        if (m < 10) datestring += "0"; 
+        datestring += m + ":";
+        if (s < 10) datestring += "0"; 
+        datestring += s;
+        return datestring;  
+    }
+}
+
+    //批量删除
+    $(".delAll_btn").click(function(){
+        var checkStatus = table.checkStatus('newsListTable'),
+            data = checkStatus.data,
+            newsId = '';
+        if(data.length > 0) {
+            for (var i in data) {
+                newsId += data[i].id+',';
+            }
+            layer.confirm('确定删除选中的文章？', {icon: 3, title: '提示信息'}, function (index) {
+            	console.log(newsId);
+               $.post('/admin/articles/trashdelete',{id:newsId},function(res){
+                layer.close(index);
+                res = eval('('+res+')');
+                if (res.code == '1') {
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    window.location.reload();
+                }else{
+                    layer.msg(res.msg,{icon:2,time:1000});
+                }
+               });
+                
+               
+            })
+        }else{
+            layer.msg("请选择需要删除的文章",{time:1000});
+        }
+    })
+
+    $(".addNews_btn").click(function(){
+        var checkStatus = table.checkStatus('newsListTable'),
+            data = checkStatus.data,
+            newsId = '';
+        if(data.length > 0) {
+            for (var i in data) {
+                newsId += data[i].id+',';
+            }
+            layer.confirm('确定还原选中的文章？', {icon: 3, title: '提示信息'}, function (index) {
+            	// console.log(newsId);
+               $.post('/admin/articles/trashrestore',{id:newsId},function(res){
+                layer.close(index);
+                res = eval('('+res+')');
+                if (res.code == '0000') {
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    window.location.reload();
+                }else{
+                    layer.msg(res.msg,{icon:2,time:1000});
+                }
+               });
+                
+               
+            })
+        }else{
+            layer.msg("请选择需要还原的文章",{time:1000});
+        }
+    })
+
+    //列表操作
+    table.on('tool(newsList)', function(obj){
+        var layEvent = obj.event,
+            data = obj.data;
+            // newsId = [];
+            // newsId.push(data.id);
+
+        if(layEvent === 'edit'){ //编辑
+            // console.log(data.id);
+            $.post('/admin/articles/trashrestore',{id:data.id},function(res){
+            res = eval('('+res+')');
+            if (res.code == '0000') {
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    window.location.reload();
+                }else{
+                    layer.msg(res.msg,{icon:2,time:1000});
+                }
+        });
+        } else if(layEvent === 'del'){ //删除
+            layer.confirm('确定删除此文章？',{icon:3, title:'提示信息'},function(index){
+               $.post('/admin/articles/trashdelete',{id:data.id},function(res){
+                layer.close(index);
+                // console.log(res);
+                res = eval('('+res+')');
+                if (res.code == '1') {
+                    layer.msg(res.msg,{icon:1,time:1000});
+                    window.location.reload();
+                }else{
+                    layer.msg(res.msg,{icon:2,time:1000});
+                }
+               });
+                layer.close(index);
+                
+            });
+        }   
+    });
+
+})
+</script>
+</body>
+</html>

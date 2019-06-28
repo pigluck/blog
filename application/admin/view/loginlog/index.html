@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>LuckyPig后台管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="__ADMIN__/css/public.css" media="all" />
+</head>
+<body class="childrenBody">
+<form class="layui-form">
+    <blockquote class="layui-elem-quote">
+        <!-- <button class="layui-btn layui-btn-sm" layui-filter='export' layui-submit>导出日志</button> -->
+        <a href="{:url('admin/loginlog/excelExport')}" class="layui-btn">导出日志</a>
+    </blockquote>
+	<table id="newsList" lay-filter="newsList"></table>
+	<script type="text/html" id="switchTpl">
+	  <input type="checkbox" name="tj" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="filter" {{ d.tj == 1 ? 'checked' : '' }}>
+	</script>
+</form>
+<script type="text/javascript" src="__ADMIN__/layui/layui.js"></script>
+<!-- <script type="text/javascript" src="__ADMIN__/js/newsList.js"></script> -->
+<script type="text/javascript">
+	layui.use(['form','layer','laydate','table','laytpl'],function(){
+    var form = layui.form,
+        layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery,
+        laydate = layui.laydate,
+        laytpl = layui.laytpl,
+        table = layui.table;
+
+    //新闻列表
+    var tableIns = table.render({
+        elem: '#newsList',
+        url : '/admin/loginlog/login',
+        cellMinWidth : 95,
+        page : true,
+        height : "full-125",
+        // width:750,
+        limit : 10,
+        // limits : [5,10,15,20,25],
+        id : "newsListTable",
+        cols : [[
+            {field: 'id', title: 'ID', width:60, align:"center",sort:true},
+            {field: 'username', title: '用户名', width:150},
+            // {field: 'content', title: '内容', align:'center',width:300},
+            {field: 'ip', title: 'IP地址',  align:'center',width:150},
+            {field: 'operation', title: '操作', align:'center'},
+            {field: 'create_time',title: '登录时间',sort:true, align:'center',width:250},
+        ]],
+    });
+
+    function stampToTime(timestamp) {
+    if(timestamp == 0) {
+        return "";
+    }else{
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear();
+        var M = date.getMonth()+ 1;
+        var D = date.getDate();
+        var h = date.getHours();
+        var m = date.getMinutes();
+        var s = date.getSeconds();
+        var datestring = Y + "-";
+        if (M < 10) datestring += "0";
+        datestring += M + "-";
+        if (D < 10) datestring += "0";
+        datestring += D + " ";
+        if (h < 10) datestring += "0";
+        datestring += h + ":";
+        if (m < 10) datestring += "0"; 
+        datestring += m + ":";
+        if (s < 10) datestring += "0"; 
+        datestring += s;
+        return datestring;  
+    }
+}
+
+})
+</script>
+</body>
+</html>

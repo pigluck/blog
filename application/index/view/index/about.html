@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>关于我-{$sys.webname}</title>
+<meta name="keywords" content="{$sys.keywords}" />
+<meta name="description" content="{$sys.description}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="__INDEX__/css/abase.css" rel="stylesheet">
+<link href="__INDEX__/css/aindex.css" rel="stylesheet">
+<link href="__INDEX__/css/am.css" rel="stylesheet">
+<script src="__INDEX__/js/ajquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="__INDEX__/js/hc-sticky.js"></script>
+<script type="text/javascript" src="__INDEX__/js/comm.js"></script>
+<script src="__INDEX__/js/heart.js"></script>
+<!--[if lt IE 9]>
+<script src="__INDEX__/js/modernizr.js"></script>
+<![endif]-->
+</head>
+<body>
+<header class="header-navigation" id="header">
+  <nav><div class="logo"><a href="/">LuckyPig</a></div>
+    <h2 id="mnavh"><span class="navicon"></span></h2>
+    <ul id="starlist">
+      <li><a href="/">网站首页</a></li>
+      <li><a href="{:url('index/about/index')}">关于我</a></li>
+      <li>
+         {lp:list db='category' dbfield='id' id='vo' where="id='1'" order='id asc' limit='10'}
+        <a href="{:url('index/'.$vo['catdir'].'/index')}">{$vo.catname}</a>
+        {/lp:list}
+      </li>
+      <li>
+        {lp:list db='category' dbfield='id' id='vo' where="id='2'" order='id asc' limit='10'}
+        <a href="{:url('index/'.$vo['catdir'].'/index')}">{$vo.catname}</a>
+        {/lp:list}
+      </li>
+      <li>
+         {lp:list db='category' dbfield='id' id='vo' where="id='5'" order='id asc' limit='10'}
+        <a href="{:url('index/'.$vo['catdir'].'/index')}">{$vo.catname}</a>
+        {/lp:list}
+      </li>
+       <li><a href="{:url('index/time/index')}">时间轴</a> </li>
+   <!--   <li><a href="{:url('index/gbook/index')}">留言</a> </li>-->
+    </ul>
+</nav>
+</header>
+<article>
+  <aside class="l_box">
+    <div class="about_me">
+      <h2>关于我</h2>
+      <ul>
+        <i><img src="__INDEX__/images/4.jpg"></i>
+        <p><b>luckypig</b>，一个90后程序员！大学刚毕业。主要进行后台开发，同时也研究web前端技术，一边工作一边积累经验，分享一些学习经验。</p>
+      </ul>
+    </div>
+    <div class="wdxc">
+      <h2>我的相册</h2>
+      <ul>
+        <li><a target="_blank" href="__INDEX__/images/7.jpg"><img src="__INDEX__/images/7.jpg"></a></li>
+        <li><a target="_blank" href="__INDEX__/images/8.jpg"><img src="__INDEX__/images/8.jpg"></a></li>
+        <li><a target="_blank" href="__INDEX__/images/9.jpg"><img src="__INDEX__/images/9.jpg"></a></li>
+        <li><a target="_blank" href="__INDEX__/images/10.jpg"><img src="__INDEX__/images/10.jpg"></a></li>
+        <li><a target="_blank" href="__INDEX__/images/11.jpg"><img src="__INDEX__/images/11.jpg"></a></li>
+        <li><a target="_blank" href="__INDEX__/images/12.jpg"><img src="__INDEX__/images/12.jpg"></a></li>
+      </ul>
+    </div>
+    <div class="search">
+      <form action="{:url('index/index/search')}" method="get" name="searchform" id="searchform">
+        <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+      </form>
+    </div>
+    <div class="fenlei">
+      <h2>文章分类</h2>
+      <ul>
+        {lp:list db='category' dbfield='id' id='vo' where="" order='id asc' limit='10'}
+        <li><a href="{:url('index/'.$vo['catdir'].'/index')}">{$vo.catname}  ({$vo.num})</a></li>
+        {/lp:list}
+        
+      </ul>
+    </div>
+   
+    <!-- <div class="guanzhu">
+      <h2>关注我 么么哒</h2>
+      <ul>
+        <img src="__INDEX__/images/wx.jpg">
+      </ul>
+    </div> -->
+  </aside>
+  <main class="r_box">
+     <div class="about">
+       {lp:list db='admin' dbfield='id' id='vo' where="admin_id='1'" order='' limit='1'}
+          {$vo.content}
+        {/lp:list}
+     </div>
+  </main>
+</article>
+<footer>
+  <p>{$sys.copyright} <a href="/">{$sys.bah}</a></p>
+</footer>
+<a href="#" class="cd-top">Top</a>
+<script type="text/javascript">
+  document.oncontextmenu = function(){
+    event.returnValue = false;
+}
+document.onselectstart = function(){
+    event.returnValue = false;
+}
+</script>
+ <!-- 鼠标特效  -->
+<script type="text/javascript">
+
+    var a_idx = 0;
+    jQuery(document).ready(function($) {
+        $("body").click(function(e) {
+            var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正" ,"法治", "爱国", "敬业", "诚信", "友善");
+            var $i = $("<span />").text(a[a_idx]);
+            a_idx = (a_idx + 1) % a.length;
+            var x = e.pageX,
+                y = e.pageY;
+            $i.css({
+                "z-index": 99999999999999999999999999999999999999999999999999999999999999999999999999 ,
+                "top": y - 20,
+                "left": x,
+                "position": "absolute",
+                "font-weight": "bold",
+                "color": "#ff6651"
+            });
+            $("body").append($i);
+            $i.animate({
+                    "top": y - 180,
+                    "opacity": 0
+                },
+                1500,
+                function() {
+                    $i.remove();
+                });
+        });
+    });
+</script>
+</body>
+</html>

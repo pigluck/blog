@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>登陆丨LuckyPig</title>
+<link rel="stylesheet" href="__INDEX__/css/reg.css">
+<script type="text/javascript">
+  document.oncontextmenu = function(){
+    event.returnValue = false;
+}
+document.onselectstart = function(){
+    event.returnValue = false;
+}
+</script>
+<body>
+<div class="login-container">
+<h1>{:lang('欢迎登陆')}LuckyPig</h1>
+<form id="loginForm">
+<div>
+<input type="text" name="username" class="username" placeholder="{:lang('用户名')}" autocomplete="off" value="" id="username" maxlength="20" />
+</div>
+<div>
+<input type="password" name="password" class="password" placeholder="{:lang('密码')}" oncontextmenu="return false" onpaste="return false" id="pwd" maxlength="16" />
+</div>
+<input type="checkbox" id="rem" name="rem" style="width: auto;height: auto;float: left;margin: 10px 5px 0 0;"><label style="float: left;color: blue;margin: 7px 0 0 5px;" for="rem">{:lang('自动登录')}</label>
+<span style="float: right;margin:8px 2px 0 0;"><a href="{:url('index/findpwd/index')}" style="text-decoration: none;">{:lang('忘记密码')}</a></span>
+<button id="submit" type="submit">{:lang('登 陆')}</button>
+</form>
+<div style="position: relative;width: 340px;margin: 7px auto 0;height: 30px;">
+	<span style="float:left;position:relative;top: 5px;">{:lang('快速登录')}</span>
+	<span style="float:right;"><a href="javascript:void(0)" onclick="toLogin('/index/login/qqlogin')"><img src="__INDEX__/images/qq_3.png"></a></span>
+	<span style="float:right;margin-right: 20px;"><a href="javascript:void(0)" onclick="toLogin('/index/login/sina')"><img src="__INDEX__/images/loginbtn_03.png"></a></span>
+</div>
+
+<a href="/reg">
+<button type="button" class="register-tis">{:lang('还有没有账号')}？</button>
+</a>
+</div>
+</body>
+<script src="__INDEX__/js/jquery.min.js"></script>
+<script src="__INDEX__/js/md5.js"></script>
+<script src="__INDEX__/js/reg.js"></script>
+
+<script src="__INDEX__/js/supersized.3.2.7.min.js"></script>
+<script src="__INDEX__/js/supersized-init.js"></script>
+
+<script src="__INDEX__/js/jquery.validate.min.js"></script>
+<script>
+ function toLogin(url)
+ {
+   //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
+   //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
+   var winheight = ($(window).height()-400)/2; 
+   var winwidth = ($(window).width()-700)/2; 
+   // console.log(winwidth);
+   var A=window.open(url,"TencentLogin","width=700,height=400,menubar=0,scrollbars=1,resizable=0,status=1,titlebar=0,toolbar=0,location=1,top="+winheight+",left="+winwidth+"\"");
+ }
+</script>
+
+</html>
