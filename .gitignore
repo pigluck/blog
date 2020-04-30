@@ -1,9 +1,5 @@
-vendor
-runtime
-thinkphp
-public/Data
-public/static
-public/uploads
-public/.htaccess
-public/.user.ini
-application/database.php
+/.idea
+/.vscode
+/vendor
+*.log
+.env
