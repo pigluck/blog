@@ -551,16 +551,16 @@
         },
         {
             "name": "topthink/think-orm",
-            "version": "v2.0.31",
+            "version": "v2.0.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-orm.git",
-                "reference": "d6965dfae21f150e29cc899ab6f9b1bd2c0f2ee4"
+                "reference": "03aaaa4d8c4475115b3acaa5aa2498bf5792e017"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-orm/zipball/d6965dfae21f150e29cc899ab6f9b1bd2c0f2ee4",
-                "reference": "d6965dfae21f150e29cc899ab6f9b1bd2c0f2ee4",
+                "url": "https://api.github.com/repos/top-think/think-orm/zipball/03aaaa4d8c4475115b3acaa5aa2498bf5792e017",
+                "reference": "03aaaa4d8c4475115b3acaa5aa2498bf5792e017",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -598,7 +598,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2020-01-07T10:05:10+00:00"
+            "time": "2020-04-26T13:54:48+00:00"
         }
     ],
     "packages-dev": [
