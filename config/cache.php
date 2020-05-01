@@ -14,7 +14,7 @@ return [
             // 驱动方式
             'type'       => 'File',
             // 缓存保存目录
-            'path'       => '',
+            'path'       => '../runtime/file',
             // 缓存前缀
             'prefix'     => '',
             // 缓存有效期 0表示永久缓存
@@ -24,6 +24,12 @@ return [
             // 序列化机制 例如 ['serialize', 'unserialize']
             'serialize'  => [],
         ],
-        // 更多的缓存连接
+        'redis' => [
+            'type' => 'redis',
+            'host' => '119.23.108.242',
+            'port' => 6379,
+            'password' => 'husong.00',
+            'select' => 0,
+        ],
     ],
 ];
