@@ -3,4 +3,4 @@
 /vendor
 *.log
 .env
-runtime
+/runtime
