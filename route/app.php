@@ -1,4 +1,4 @@
 <?php
 use think\facade\Route;
 
-Route::post('hello','index/hello');
+Route::get('article/:id','article/articleDetail');
