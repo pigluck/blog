@@ -33,5 +33,9 @@ return [
     'show_error_msg'   => false,
     'http_exception_template' => [
         404 => app()->getRootPath() . 'view/exception/404.html'
-    ]
+    ],
+    'tplreplacestring'  =>  [
+        '__PUBLIC__'=>'/static',
+        '__JS' => '/static/javascript',
+]
 ];
